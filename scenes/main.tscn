@@ -1,0 +1,163 @@
+[gd_scene load_steps=29 format=3 uid="uid://dsj162j7kd4ps"]
+
+[ext_resource type="Shader" path="res://scenes/SkyShader.gdshader" id="1_isu2t"]
+[ext_resource type="Texture2D" uid="uid://ct5dmokcsmu7y" path="res://textures/grids/Orange/texture_02.png" id="2_1o2xr"]
+[ext_resource type="Texture2D" uid="uid://dmxmgw3rh0ym2" path="res://textures/grids/Purple/texture_01.png" id="3_v5bgw"]
+[ext_resource type="PackedScene" uid="uid://d0haxki736we5" path="res://scenes/player.tscn" id="4_8apdx"]
+[ext_resource type="Texture2D" uid="uid://c7ks4lubwjoy3" path="res://textures/grids/Green/texture_04.png" id="5_53ixg"]
+[ext_resource type="Texture2D" uid="uid://djd4370ov2ssn" path="res://textures/grids/Green/texture_11.png" id="5_c18uf"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="7_67dxs"]
+[ext_resource type="Resource" path="res://TerrainData/data.hterrain" id="8_82rhx"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="9_h7crs"]
+[ext_resource type="Texture2D" uid="uid://b3u6ih8taemtw" path="res://scenes/main_slot1_albedo_bump.png" id="10_85fqh"]
+[ext_resource type="Texture2D" uid="uid://bgu3k6agqxuxn" path="res://scenes/main_slot0_albedo_bump.png" id="10_kl3cd"]
+[ext_resource type="Texture2D" uid="uid://co6t5wi8se7hg" path="res://scenes/main_slot0_normal_roughness.png" id="11_nbpam"]
+[ext_resource type="Texture2D" uid="uid://fuf5powlifs0" path="res://scenes/main_slot1_normal_roughness.png" id="12_uic7h"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_detail_layer.gd" id="13_eul6o"]
+[ext_resource type="Texture2D" uid="uid://cweimax8sn5uc" path="res://textures/128x128/grass3_32x32.png" id="14_3ut5w"]
+[ext_resource type="Texture2D" uid="uid://6jmdwj3vn6m0" path="res://addons/zylann.hterrain/tools/icons/icon_detail_layer_node.svg" id="15_oyckd"]
+[ext_resource type="Texture2D" uid="uid://3neycgxjvqpj" path="res://textures/128x128/flowers_32x32.png" id="16_7jkye"]
+[ext_resource type="Texture2D" uid="uid://cljv1athv64m7" path="res://textures/128x128/flowers2_32x32.png" id="17_hktd2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rsn78"]
+shader = ExtResource("1_isu2t")
+shader_parameter/skyColor = Color(0.596078, 0.439216, 0.972549, 1)
+shader_parameter/horizonColor = Color(0.737255, 0.0745098, 0.580392, 1)
+
+[sub_resource type="Sky" id="Sky_lwk7l"]
+sky_material = SubResource("ShaderMaterial_rsn78")
+
+[sub_resource type="Environment" id="Environment_qkset"]
+background_mode = 2
+background_color = Color(0.00392157, 0.0588235, 0.2, 1)
+sky = SubResource("Sky_lwk7l")
+glow_enabled = true
+fog_light_color = Color(0.486275, 0.509804, 0.717647, 1)
+fog_light_energy = 0.22
+fog_sun_scatter = 0.17
+fog_density = 0.0625
+fog_sky_affect = 0.189
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qf6ol"]
+albedo_texture = ExtResource("2_1o2xr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t0jmj"]
+albedo_texture = ExtResource("3_v5bgw")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sp5au"]
+albedo_texture = ExtResource("5_c18uf")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wjybe"]
+radial_segments = 80
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8v8jg"]
+albedo_texture = ExtResource("5_53ixg")
+emission = Color(0.639216, 0.639216, 0.639216, 1)
+emission_energy_multiplier = 1.83
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6bood"]
+lightmap_size_hint = Vector2i(32, 32)
+add_uv2 = true
+size = Vector2(6, 6)
+
+[sub_resource type="Resource" id="Resource_sse42"]
+script = ExtResource("9_h7crs")
+mode = 0
+textures = [[ExtResource("10_kl3cd"), ExtResource("10_85fqh")], [ExtResource("11_nbpam"), ExtResource("12_uic7h")]]
+
+[node name="World" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.516143, -0.629977, 0.580281, 0.173862, 0.586333, 0.791192, -0.838671, 0.509257, -0.193103, -52.9732, 101.579, 89.4865)
+light_color = Color(0.74902, 0.568627, 0.584314, 1)
+light_indirect_energy = 2.62
+shadow_enabled = true
+shadow_opacity = 0.85
+shadow_blur = 2.034
+directional_shadow_mode = 0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qkset")
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.87244, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_qf6ol")
+use_collision = true
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Map"]
+transform = Transform3D(0.097774, 0, -0.995209, 0, 1, 0, 0.995209, 0, 0.097774, -5.26923, 0.6, 0)
+material_override = SubResource("StandardMaterial3D_t0jmj")
+use_collision = true
+size = Vector3(2, 2, 2)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Map"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.20662, 1.58397, 7.95006)
+material_override = SubResource("StandardMaterial3D_sp5au")
+use_collision = true
+mesh = SubResource("CylinderMesh_wjybe")
+
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, -0.03087, -0.999523, 0, 0.999523, -0.03087, -0.31727, 3.21139, -10.1245)
+material_override = SubResource("StandardMaterial3D_8v8jg")
+use_collision = true
+mesh = SubResource("PlaneMesh_6bood")
+
+[node name="HTerrain" type="Node3D" parent="Map"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+script = ExtResource("7_67dxs")
+centered = true
+_terrain_data = ExtResource("8_82rhx")
+chunk_size = 32
+collision_enabled = true
+collision_layer = 1
+collision_mask = 1
+shader_type = "Classic4Lite"
+custom_shader = null
+custom_globalmap_shader = null
+texture_set = SubResource("Resource_sse42")
+render_layers = 1
+cast_shadow = 1
+shader_params/u_ground_uv_scale = 20
+shader_params/u_depth_blending = true
+shader_params/u_triplanar = false
+shader_params/u_tile_reduction = Vector4(0, 0, 0, 0)
+shader_params/u_specular = 0.5
+
+[node name="@Node3D@20849" type="Node3D" parent="Map/HTerrain"]
+script = ExtResource("13_eul6o")
+texture = ExtResource("14_3ut5w")
+shader_params/u_globalmap_tint_bottom = null
+shader_params/u_globalmap_tint_top = null
+shader_params/u_bottom_ao = null
+shader_params/u_instance_scale = Vector3(1, 1, 1)
+shader_params/u_roughness = 0.9
+metadata/_editor_icon = ExtResource("15_oyckd")
+
+[node name="HTerrainDetailLayer" type="Node3D" parent="Map/HTerrain"]
+script = ExtResource("13_eul6o")
+layer_index = 1
+texture = ExtResource("16_7jkye")
+shader_params/u_globalmap_tint_bottom = null
+shader_params/u_globalmap_tint_top = null
+shader_params/u_bottom_ao = null
+shader_params/u_instance_scale = Vector3(1, 1, 1)
+shader_params/u_roughness = 0.9
+metadata/_editor_icon = ExtResource("15_oyckd")
+
+[node name="@Node3D@22326" type="Node3D" parent="Map/HTerrain"]
+script = ExtResource("13_eul6o")
+layer_index = 2
+texture = ExtResource("17_hktd2")
+density = 1.0
+shader_params/u_globalmap_tint_bottom = null
+shader_params/u_globalmap_tint_top = null
+shader_params/u_bottom_ao = null
+shader_params/u_instance_scale = Vector3(1, 1, 1)
+shader_params/u_roughness = 0.9
+metadata/_editor_icon = ExtResource("15_oyckd")
+
+[node name="Player" parent="." instance=ExtResource("4_8apdx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.250353, 0)

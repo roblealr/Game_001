@@ -1,0 +1,83 @@
+[gd_scene load_steps=11 format=3 uid="uid://d0haxki736we5"]
+
+[ext_resource type="PackedScene" uid="uid://bdq6ajic6fjrf" path="res://models/mixamo_base.glb" id="1_0xf2g"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_cuc7h"]
+[ext_resource type="Shader" path="res://scenes/player.gdshader" id="3_6gvx5"]
+[ext_resource type="PackedScene" uid="uid://b8cjbu24ebq28" path="res://scenes/gun.tscn" id="3_j5di8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_255w8"]
+radius = 0.316216
+height = 1.80914
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m0dv7"]
+render_priority = 0
+shader = ExtResource("3_6gvx5")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dupaf"]
+lightmap_size_hint = Vector2i(52, 52)
+material = SubResource("ShaderMaterial_m0dv7")
+flip_faces = true
+size = Vector2(10, 10)
+
+[sub_resource type="Animation" id="Animation_2smsr"]
+resource_name = "Shoot"
+length = 0.1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.691362, -0.35237, -0.893496), Vector3(0.691, -0.352, -0.799), Vector3(0.691362, -0.35237, -0.893496)]
+}
+
+[sub_resource type="Animation" id="Animation_yes0r"]
+resource_name = "shoot"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wgbj5"]
+_data = {
+"Shoot": SubResource("Animation_2smsr"),
+"shoot": SubResource("Animation_yes0r")
+}
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_cuc7h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.952782, 0)
+shape = SubResource("CapsuleShape3D_255w8")
+
+[node name="visuals" type="Node3D" parent="."]
+
+[node name="mixamo_base" parent="visuals" instance=ExtResource("1_0xf2g")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+visible = false
+
+[node name="camera_mount" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.28226, 0)
+
+[node name="Camera3D" type="Camera3D" parent="camera_mount"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0853307, 0.0254049, 0.0743767)
+fov = 85.6
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="camera_mount/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.0990373, 2.15495, -0.550096)
+visible = false
+mesh = SubResource("PlaneMesh_dupaf")
+
+[node name="Gun" parent="camera_mount/Camera3D" instance=ExtResource("3_j5di8")]
+transform = Transform3D(0.215, 0, 0, 0, 0.215, 0, 0, 0, 0.215, 0.460566, -0.35237, -0.893496)
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="camera_mount/Camera3D/Gun"]
+libraries = {
+"": SubResource("AnimationLibrary_wgbj5")
+}
+
+[node name="RayCast3D" type="RayCast3D" parent="camera_mount/Camera3D/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.438902, -0.786652)
+target_position = Vector3(0, 0, -1)
